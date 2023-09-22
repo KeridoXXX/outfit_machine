@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generator</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="bg_menu">
+        <div class="bg_fest"><img src="knapper/fest_knap.png" alt="" /></div>
+        <div class="bg_kbh">
+          <img src="knapper/koebenhavn_knap.png" alt="" />
+        </div>
+        <div class="bg_rampen">
+          <img src="knapper/rampen_knap.png" alt="" />
+        </div>
+        <div class="bg_kontor">
+          <img src="knapper/kontor_knap_1.png" alt="" />
+        </div>
+        <div class="bg_skab"><img src="knapper/skab_knap_1.png" alt="" /></div>
+      </nav>
+    </header>
+    <main>
+      <div class="knappen">
+        <img src="knapper/random_btn.png" alt="" />
+      </div>
+
+      <div id="outfit_container">
+        <div class="hat_container">
+          <img class="arrow hat_left" src="knapper/blue_left.png" alt="" />
+          <div class="outfit_hat">
+            <img class="hat_img" src="" alt="" />
+          </div>
+          <img class="arrow hat_right" src="knapper/blue_right.png" alt="" />
+        </div>
+        <div class="face_container">
+          <img class="arrow face_left" src="knapper/orange_left.png" alt="" />
+          <div class="outfit_face">
+            <img class="face_img" src="" alt="" />
+          </div>
+          <img class="arrow face_right" src="knapper/orange_right.png" alt="" />
+        </div>
+        <div class="shirt_container">
+          <img class="arrow shirt_left" src="knapper/red_left.png" alt="" />
+          <div class="outfit_shirt">
+            <img class="shirt_img" src="" alt="" />
+          </div>
+          <img class="arrow shirt_right" src="knapper/red_right.png" alt="" />
+        </div>
+        <div class="pants_container">
+          <img class="arrow pants_left" src="knapper/pink_left.png" alt="" />
+          <div class="outfit_pants">
+            <img class="pants_img" src="" alt="" />
+          </div>
+          <img class="arrow pants_right" src="knapper/pink_right.png" alt="" />
+        </div>
+        <div class="shoes_container">
+          <img class="arrow shoes_left" src="knapper/yellow_left.png" alt="" />
+          <div class="outfit_shoes">
+            <img class="shoes_img" src="" alt="" />
+          </div>
+          <img
+            class="arrow shoes_right"
+            src="knapper/yellow_right.png"
+            alt=""
+          />
+        </div>
+      </div>
+      <div id="numbersContainer"></div>
+    </main>
+    <footer></footer>
+    <script>
+      // variables for background
+      let fest = document.querySelector(".bg_fest");
+      let kbh = document.querySelector(".bg_kbh");
+      let rampen = document.querySelector(".bg_rampen");
+      let kontor = document.querySelector(".bg_kontor");
+      let skab = document.querySelector(".bg_skab");
+
+      // other variables
+      let knappen = document.querySelector(".knappen");
+      let outfit_container = document.querySelector("#outfit_container");
+
+      // variables for the clothing
+      let hat = document.querySelector(".outfit_hat");
+      let face = document.querySelector(".outfit_face");
+      let shirt = document.querySelector(".outfit_shirt");
+      let pants = document.querySelector(".outfit_pants");
+      let shoes = document.querySelector(".outfit_shoes");
+      let hatImg = document.querySelector(".hat_img");
+      let faceImg = document.querySelector(".face_img");
+      let shirtImg = document.querySelector(".shirt_img");
+      let pantsImg = document.querySelector(".pants_img");
+      let shoesImg = document.querySelector(".shoes_img");
+
+      // variables for arrows
+      let hatAdd = document.querySelector(".hat_right");
+      let hatSub = document.querySelector(".hat_left");
+      let faceAdd = document.querySelector(".face_right");
+      let faceSub = document.querySelector(".face_left");
+      let shirtAdd = document.querySelector(".shirt_right");
+      let shirtSub = document.querySelector(".shirt_left");
+      let pantsAdd = document.querySelector(".pants_right");
+      let pantsSub = document.querySelector(".pants_left");
+      let shoesAdd = document.querySelector(".shoes_right");
+      let shoesSub = document.querySelector(".shoes_left");
+      let arrows = document.querySelectorAll(".arrow");
+
+      // event listeners for changing backgrounds
+      fest.addEventListener("click", bgFest);
+      kbh.addEventListener("click", bgKbh);
+      rampen.addEventListener("click", bgRampen);
+      kontor.addEventListener("click", bgKontor);
+      skab.addEventListener("click", bgSkab);
+
+      // event listeners for random clothing generation (press the item ou want to change/ or press the btn that changes them all)
+      hat.addEventListener("click", generateHat);
+      hat.addEventListener("contextmenu", pickHat);
+      face.addEventListener("click", generateFace);
+      shirt.addEventListener("click", generateShirt);
+      pants.addEventListener("click", generatePants);
+      shoes.addEventListener("click", generateShoes);
+      knappen.addEventListener("click", generateHat);
+      knappen.addEventListener("click", generateFace);
+      knappen.addEventListener("click", generateShirt);
+      knappen.addEventListener("click", generatePants);
+      knappen.addEventListener("click", generateShoes);
+
+      //eventlisteners for the arrows
+      hatAdd.addEventListener("click", addHat);
+      hatSub.addEventListener("click", subHat);
+      faceAdd.addEventListener("click", addFace);
+      faceSub.addEventListener("click", subFace);
+      shirtAdd.addEventListener("click", addShirt);
+      shirtSub.addEventListener("click", subShirt);
+      pantsAdd.addEventListener("click", addPants);
+      pantsSub.addEventListener("click", subPants);
+      shoesAdd.addEventListener("click", addShoes);
+      shoesSub.addEventListener("click", subShoes);
+      // generate outfit functions
+      //
+      let random_hat = null; // this should be global scope.
+
+      function generateHat() {
+        random_hat = Math.floor(Math.random() * 13) + 1;
+        console.log(random_hat, "hat");
+        hatImg.src = "clothes/hat" + random_hat + ".webp";
+        arrows.forEach(function (arrow) {
+          arrow.style.display = "block";
+        });
+        displayNumbers();
+      }
+
+      function pickHat() {
+        event.preventDefault();
+        console.log("pickHat");
+
+        // Create a dropdown menu
+        const dropdown = document.createElement("select");
+
+        // Event listener for the dropdown menu
+        dropdown.addEventListener("change", function () {
+          // Get the selected hat number
+          const selectedHat = parseInt(this.value);
+
+          // Update the random_hat variable
+          random_hat = selectedHat;
+
+          // Update the hat image source
+          hatImg.src = "clothes/hat" + selectedHat + ".webp";
+
+          console.log(selectedHat, "hat");
+          displayNumbers();
+        });
+
+        // Add options to the dropdown for hat selection
+        for (let i = 1; i <= 13; i++) {
+          const option = document.createElement("option");
+          option.value = i;
+          option.text = "Hat " + i;
+          dropdown.appendChild(option);
+        }
+
+        // Position the dropdown menu
+        const dropdownContainer = document.createElement("div");
+        dropdownContainer.appendChild(dropdown);
+        dropdownContainer.style.position = "absolute";
+        dropdownContainer.style.top = event.clientY + "px";
+        dropdownContainer.style.left = event.clientX + "px";
+
+        // Add the dropdown menu to the document
+        document.body.appendChild(dropdownContainer);
+
+        // Remove the dropdown menu when the user clicks outside of it
+        window.addEventListener("click", function (e) {
+          if (!dropdownContainer.contains(e.target)) {
+            document.body.removeChild(dropdownContainer);
+          }
+        });
+      }
+
+      //adds 1 to the random_hat variable
+      function addHat() {
+        random_hat += 1;
+        if (random_hat > 13) {
+          random_hat = 1;
+        }
+        hatImg.src = "clothes/hat" + random_hat + ".webp";
+        console.log(random_hat, "hat");
+        displayNumbers();
+      }
+
+      // subtracts 1 from the random_hat variable
+      function subHat() {
+        random_hat -= 1;
+        if (random_hat < 1) {
+          random_hat = 13;
+        }
+        hatImg.src = "clothes/hat" + random_hat + ".webp";
+        console.log(random_hat, "hat");
+        displayNumbers();
+      }
+
+      //copypaste from the one above ofc this applies to the face part of the outfit
+      let random_face = null;
+      function generateFace() {
+        random_face = Math.floor(Math.random() * 13) + 1;
+        console.log(random_face, "face");
+        faceImg.src = "clothes/facenew" + random_face + ".webp";
+        displayNumbers();
+      }
+      function addFace() {
+        random_face += 1;
+        if (random_face > 13) {
+          random_face = 1;
+        }
+        faceImg.src = "clothes/facenew" + random_face + ".webp";
+        console.log(random_face, "face");
+        displayNumbers();
+      }
+      function subFace() {
+        random_face -= 1;
+        if (random_face < 1) {
+          random_face = 13;
+        }
+        faceImg.src = "clothes/facenew" + random_face + ".webp";
+        console.log(random_face, "face");
+        displayNumbers();
+      }
+
+      let random_shirt = null;
+      function generateShirt() {
+        random_shirt = Math.floor(Math.random() * 99) + 1;
+        console.log(random_shirt, "shirt");
+        shirtImg.src = "clothes/shirt" + random_shirt + ".webp";
+        displayNumbers();
+      }
+      function addShirt() {
+        random_shirt += 1;
+        if (random_shirt > 99) {
+          random_shirt = 1;
+        }
+        shirtImg.src = "clothes/shirt" + random_shirt + ".webp";
+        console.log(random_shirt, "shirt");
+        displayNumbers();
+      }
+      function subShirt() {
+        random_shirt -= 1;
+        if (random_shirt < 1) {
+          random_shirt = 99;
+        }
+        shirtImg.src = "clothes/shirt" + random_shirt + ".webp";
+        console.log(random_shirt, "shirt");
+        displayNumbers();
+      }
+
+      let random_pants = null;
+      function generatePants() {
+        random_pants = Math.floor(Math.random() * 43) + 1;
+        console.log(random_pants, "pants");
+        pantsImg.src = "clothes/pants" + random_pants + ".webp";
+        displayNumbers();
+      }
+      function addPants() {
+        random_pants += 1;
+        if (random_pants > 43) {
+          random_pants = 1;
+        }
+        pantsImg.src = "clothes/pants" + random_pants + ".webp";
+        console.log(random_pants, "pants");
+        displayNumbers();
+      }
+      function subPants() {
+        random_pants -= 1;
+        if (random_pants < 1) {
+          random_pants = 43;
+        }
+        pantsImg.src = "clothes/pants" + random_pants + ".webp";
+        console.log(random_pants, "pants");
+        displayNumbers();
+      }
+
+      let random_shoes = null;
+      function generateShoes() {
+        random_shoes = Math.floor(Math.random() * 6) + 1;
+        console.log(random_shoes, "shoes");
+        shoesImg.src = "clothes/shoes" + random_shoes + ".webp";
+        displayNumbers();
+      }
+      function addShoes() {
+        random_shoes += 1;
+        if (random_shoes > 6) {
+          random_shoes = 1;
+        }
+        shoesImg.src = "clothes/shoes" + random_shoes + ".webp";
+        console.log(random_shoes, "shoes");
+        displayNumbers();
+      }
+      function subShoes() {
+        random_shoes -= 1;
+        if (random_shoes < 1) {
+          random_shoes = 6;
+        }
+        shoesImg.src = "clothes/shoes" + random_shoes + ".webp";
+        console.log(random_shoes, "shoes");
+        displayNumbers();
+      }
+
+      let numbersContainer = document.getElementById("numbersContainer");
+
+      function displayNumbers() {
+        // Step 1: Clear the numbersContainer
+        numbersContainer.innerHTML = "";
+
+        // Step 2: Display the tens digit of random_hat
+        displayDigit(Math.floor(random_hat / 10));
+
+        // Step 3: Display the ones digit of random_hat
+        displayDigit(random_hat % 10);
+
+        // Step 4: Repeat steps 2 and 3 for the other variables (random_face, random_shirt, etc.)
+        displayDigit(Math.floor(random_face / 10));
+
+        displayDigit(random_face % 10);
+
+        displayDigit(Math.floor(random_shirt / 10));
+
+        displayDigit(random_shirt % 10);
+
+        displayDigit(Math.floor(random_pants / 10));
+
+        displayDigit(random_pants % 10);
+
+        displayDigit(Math.floor(random_shoes / 10));
+
+        displayDigit(random_shoes % 10);
+      }
+
+      function displayDigit(digit) {
+        // Step 5: Create an image element for the given digit
+        let img = createNumberImage(digit);
+
+        // Step 6: Append the image element to the numbersContainer
+        numbersContainer.appendChild(img);
+      }
+
+      function createNumberImage(digit) {
+        // Step 8: Create an <img> element
+        let img = document.createElement("img");
+
+        // Step 9: Set the src attribute to the corresponding random image URL based on the digit and random index
+        const randomNumberBetween1And3 = Math.floor(Math.random() * 3);
+        img.src =
+          "numbas/webp/" + digit + "_" + randomNumberBetween1And3 + ".webp";
+
+        // Step 10: Return the created <img> element
+        return img;
+      }
+
+      // function createNumberImage(digit) {
+      //   // Step 7: Generate a random index to select a random image
+      //   let randomIndex = Math.floor(Math.random() * 3); // Assuming you have 3 images per digit
+
+      //   // Step 8: Create an <img> element
+      //   let img = document.createElement("img");
+
+      //   // Step 9: Set the src attribute to the corresponding random image URL based on the digit and random index
+      //   img.src = "numbas/" + digit + "_" + randomIndex + ".png";
+
+      //   // Step 10: Return the created <img> element
+      //   return img;
+      // }
+
+      // displayNumbers();
+
+      // backgrounds
+
+      function bgFest() {
+        console.log("click");
+        document.body.style.backgroundImage = "url(baggrund/fest2.webp)";
+      }
+
+      function bgKbh() {
+        console.log("click");
+        document.body.style.backgroundImage = "url(baggrund/byen.webp)";
+      }
+
+      function bgRampen() {
+        console.log("click");
+        document.body.style.backgroundImage = "url(baggrund/skatepark.webp)";
+      }
+
+      function bgKontor() {
+        console.log("click");
+        document.body.style.backgroundImage = "url(baggrund/kontor.webp)";
+      }
+
+      function bgSkab() {
+        console.log("click");
+        document.body.style.backgroundImage = "url(baggrund/wow.webp)";
+      }
+
+      // ideas
+      // a number is displayed on the arrows indicating which number was previous/next
+      // a code that gets generated that corrosponds to a certain outfit, ou should be able to copy this code and send it elsewhere and have a replicable result
+      // a btn that hides the arrows for screenshots and such
+      // the code for a specific outfit should be displayed with ransom numbers
+      // btn that generated a screenshot of the code and outfit for sharing?
+    </script>
+  </body>
+</html>
